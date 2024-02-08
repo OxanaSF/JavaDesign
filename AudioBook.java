@@ -4,13 +4,13 @@ public class AudioBook extends Book {
     private String narrator;
     private double listeningLength;
 
-    public AudioBook(int id, boolean availability,
+    public AudioBook(String type, int id, boolean availability,
                      String name, String description, double weight,
                      double length, double height, double price, String isbn,
                      String author, String publisher, String genre, String language,
                      String format, String edition, int numOfPages,
                      LocalDate publicationDate, String narrator, double listeningLength) {
-        super(id, availability, name, description,
+        super(type, id, availability, name, description,
                 weight, length, height, price, isbn, author, publisher,
                 genre, language, format, edition, numOfPages, publicationDate);
         this.narrator = narrator;

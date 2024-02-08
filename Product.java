@@ -1,5 +1,6 @@
-public abstract class Product {
+public abstract class Product implements Comparable<Product> {
 
+    private String type;
     private int id;
     private boolean availability;
     private String category;
@@ -11,7 +12,11 @@ public abstract class Product {
     private double price;
 
 
-    public Product(int id,
+    // M2 HOMEWORK STATIC
+    private static int numProducts = 0;
+
+    public Product(String type,
+                   int id,
                    boolean availability,
                    String category,
                    String name,
@@ -20,6 +25,7 @@ public abstract class Product {
                    double length,
                    double height,
                    double price) {
+        this.type = type;
         this.id = id;
         this.availability = availability;
         this.category = category;
@@ -29,6 +35,21 @@ public abstract class Product {
         this.length = length;
         this.height = height;
         this.price = price;
+
+        Product.numProducts++;
+    }
+
+    // M2 HOMEWORK STATIC
+    public static int getNumProducts() {
+        return Product.numProducts;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getId() {
@@ -105,7 +126,8 @@ public abstract class Product {
 
     @Override
     public String toString() {
-        return "Id: " + id + "\n" +
+        return "Type: " + type + "\n" +
+                "Id: " + id + "\n" +
                 "Availability: " + availability + "\n" +
                 "Category: " + category + "\n" +
                 "Name: " + name + "\n" +
@@ -119,6 +141,7 @@ public abstract class Product {
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof Product otherProduct)
+                && this.type.equals(otherProduct.type)
                 && this.id == otherProduct.id
                 && this.availability == otherProduct.availability
                 && this.category.equals(otherProduct.category)
@@ -129,5 +152,16 @@ public abstract class Product {
                 && this.height == otherProduct.height
                 && this.price == otherProduct.price;
     }
+
+
+    @Override
+    public  int compareTo(Product product) {
+        if (getName().compareToIgnoreCase(product.getName()) != 0) {
+            return getName().compareToIgnoreCase(product.getName());
+        } else {
+            return Integer.compare(getId(), product.getId());
+        }
+    }
+
 
 }

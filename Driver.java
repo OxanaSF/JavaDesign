@@ -1,12 +1,17 @@
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.Collections;
+
 
 public class Driver {
     public static void main(String[] args) {
         ArrayList<Product> products = new ArrayList<>();
 
+
+        // M2 USING FACTORY
         LocalDate bookPublicationDate = LocalDate.of(2021, 10, 5);
-        Book book1 = new Book(1,
+        Product book1 = ProductFactory.createProduct( "book",
+                1,
                 true,
                 "The Brothers Karamazov",
                 "Fyodor Dostoyevsky's powerful meditation on faith, " +
@@ -22,10 +27,13 @@ public class Driver {
                 "paperback",
                 "Reissue edition (April 29, 2003)",
                 1056,
-                bookPublicationDate
+                bookPublicationDate,
+                null, 0.00, null, null
+
         );
 
-        Book book2 = new Book(1,
+        Product book2 = ProductFactory.createProduct ("book",
+                1,
                 true,
                 "The Brothers Karamazov",
                 "Fyodor Dostoyevsky's powerful meditation on faith, " +
@@ -41,12 +49,14 @@ public class Driver {
                 "paperback",
                 "Reissue edition (April 29, 2003)",
                 1056,
-                bookPublicationDate
+                bookPublicationDate,
+                null, 0.00, null, null
         );
 
 
         LocalDate audioBookPublicationDate = LocalDate.of(2019, 1, 1);
-        Book audioBook1 = new AudioBook(2,
+        Product audioBook1 = ProductFactory.createProduct("audiobook",
+                2,
                 true,
                 "Anna Karenina",
                 "The embodiment of the clash between Russia's old-world tradition and its " +
@@ -63,9 +73,12 @@ public class Driver {
                 0,
                 audioBookPublicationDate,
                 "Elizabeth Knowelden",
-                38.07);
+                38.07,
+                null, null
+        );
 
-        Book audioBook2 = new AudioBook(2,
+        Product audioBook2 = ProductFactory.createProduct ("audiobook",
+                1,
                 true,
                 "Anna Karenina",
                 "The embodiment of the clash between Russia's old-world tradition and its " +
@@ -82,11 +95,14 @@ public class Driver {
                 0,
                 audioBookPublicationDate,
                 "Elizabeth Knowelden",
-                38.07);
+                38.07,
+                null, null
+        );
 
 
         LocalDate eBookPublicationDate = LocalDate.of(2011, 5, 3);
-        Book eBook1 = new EBook(3,
+        Product eBook1 = ProductFactory.createProduct("ebook",
+                3,
                 true,
                 "Gone with the Wind",
                 "Since its original publication in 1936, Gone With the Wind—winner " +
@@ -102,10 +118,12 @@ public class Driver {
                 "Reissue edition (November 1, 2007)",
                 524,
                 eBookPublicationDate,
+                null, 0.00,
                 "https://ia803006.us.archive.org/16/items/GoneWithTheWindByMargaretMitchell/Gone%20with%20the%20Wind%20by%20Margaret%20Mitchell.pdf",
                 "3225 KB");
 
-        Book eBook2 = new EBook(3,
+        Product eBook2 = ProductFactory.createProduct("ebook",
+                3,
                 true,
                 "Gone with the Wind",
                 "Since its original publication in 1936, Gone With the Wind—winner " +
@@ -121,26 +139,52 @@ public class Driver {
                 "Reissue edition (November 1, 2007)",
                 524,
                 eBookPublicationDate,
+                null, 0.00,
                 "https://ia803006.us.archive.org/16/items/GoneWithTheWindByMargaretMitchell/Gone%20with%20the%20Wind%20by%20Margaret%20Mitchell.pdf",
                 "3225 KB");
 
 
         products.add(book1);
         products.add(audioBook1);
+        // add Anna Karenina book with id 1 to test compareTo for id part
+        products.add(audioBook2);
         products.add(eBook1);
 
+
+        System.out.println("BEFORE Sorting");
         for (Product product : products) {
             System.out.println(product.toString());
         }
+
+        Collections.sort(products);
+
+        System.out.println("AFTER Sorting");
+        for (Product product : products) {
+            System.out.println(product.toString());
+        }
+
+
 
         System.out.println("Compare book1 and book2: " + book1.equals(book2));
         System.out.println("Compare audioBook1 and audioBook2: " + audioBook1.equals(audioBook2));
         System.out.println("Compare eBook1 and eBook2: " + eBook1.equals(eBook2));
         System.out.println();
 
-        System.out.println("The shipping cost of book1 is: " + "$" + book1.calculateShippingCost());
-        System.out.println("The shipping cost of audiobook1 is: " + "$" + audioBook1.calculateShippingCost());
-        System.out.println("The shipping cost of ebook1 is: " + "$" + eBook1.calculateShippingCost());
+
+        if (book1 instanceof Book) {
+            Book book = (Book) book1;
+            System.out.println("The shipping cost of book1 is: " + "$" + book.calculateShippingCost());
+        }
+
+        if (audioBook1 instanceof AudioBook) {
+            AudioBook audiobook = (AudioBook) audioBook1;
+            System.out.println("The shipping cost of book1 is: " + "$" + audiobook.calculateShippingCost());
+        }
+
+        if (eBook1 instanceof EBook) {
+            EBook ebook = (EBook) eBook1;
+            System.out.println("The shipping cost of book1 is: " + "$" + ebook.calculateShippingCost());
+        }
         System.out.println();
 
         if (audioBook1 instanceof AudioBook) {
@@ -162,6 +206,11 @@ public class Driver {
         System.out.println("Check default category for book1: " + book1.getCategory());
         System.out.println("Check default category for audiobook1: " + audioBook1.getCategory());
         System.out.println("Check default category for ebook1: " + eBook1.getCategory());
+
+
+        System.out.println("Number of products : " + Product.getNumProducts());
+
+
 
 
     }

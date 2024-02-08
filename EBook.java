@@ -5,13 +5,13 @@ public class EBook extends Book {
     private String fileSize;
 
 
-    public EBook(int id, boolean availability, String name,
+    public EBook(String type, int id, boolean availability, String name,
                  String description, double weight, double length,
                  double height, double price, String isbn, String author,
                  String publisher, String genre, String language, String format,
                  String edition, int numOfPages, LocalDate publicationDate,
                  String linkToRead, String fileSize) {
-        super(id, availability, name, description,
+        super(type, id, availability, name, description,
                 weight, length, height, price, isbn, author, publisher,
                 genre, language, format, edition, numOfPages, publicationDate);
         this.linkToRead = linkToRead;

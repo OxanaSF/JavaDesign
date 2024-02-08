@@ -11,15 +11,15 @@ public class Book extends Product {
     private int numOfPages;
     private LocalDate publicationDate;
 
-    private static  final  String DEFAULT_BOOK_CATEGORY = "book";
+    private static final String DEFAULT_BOOK_CATEGORY = "book";
 
-    public Book(int id, boolean availability,
+    public Book(String type, int id, boolean availability,
                 String name, String description,
                 double weight, double length, double height,
                 double price, String isbn, String author, String publisher,
                 String genre, String language, String format,
                 String edition, int numOfPages, LocalDate publicationDate) {
-        super(id, availability, DEFAULT_BOOK_CATEGORY, name, description, weight, length, height, price);
+        super(type, id, availability, DEFAULT_BOOK_CATEGORY, name, description, weight, length, height, price);
 
 
         this.isbn = isbn;
