@@ -1,6 +1,6 @@
 public abstract class Product implements Comparable<Product> {
-
-    private String type;
+    // M3 HOMEWORK ENUM USE
+    private ProductFactory.ProductType type;
     private int id;
     private boolean availability;
     private String category;
@@ -15,7 +15,7 @@ public abstract class Product implements Comparable<Product> {
     // M2 HOMEWORK STATIC
     private static int numProducts = 0;
 
-    public Product(String type,
+    public Product(ProductFactory.ProductType type,
                    int id,
                    boolean availability,
                    String category,
@@ -44,12 +44,16 @@ public abstract class Product implements Comparable<Product> {
         return Product.numProducts;
     }
 
-    public String getType() {
+    public ProductFactory.ProductType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ProductFactory.ProductType type) {
         this.type = type;
+    }
+
+    public static void setNumProducts(int numProducts) {
+        Product.numProducts = numProducts;
     }
 
     public int getId() {
@@ -155,13 +159,15 @@ public abstract class Product implements Comparable<Product> {
 
 
     @Override
-    public  int compareTo(Product product) {
+    public int compareTo(Product product) {
         if (getName().compareToIgnoreCase(product.getName()) != 0) {
             return getName().compareToIgnoreCase(product.getName());
         } else {
             return Integer.compare(getId(), product.getId());
         }
     }
+
+    
 
 
 }

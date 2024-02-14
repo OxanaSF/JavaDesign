@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.Comparator;
 
 public class Book extends Product {
     private String isbn;
@@ -13,7 +14,12 @@ public class Book extends Product {
 
     private static final String DEFAULT_BOOK_CATEGORY = "book";
 
-    public Book(String type, int id, boolean availability,
+    public static final Comparator<Book> AUTHOR_LAST_NAME_COMPARATOR = new AuthorLastNameComparator();
+    public static final Comparator<Book> PUBLICATION_DATE_COMPARATOR = new PublicationDateComparator();
+    public static final Comparator<Book> GENRE_COMPARATOR = new GenreComparator();
+
+    // M3 HOMEWORK ENUM USE
+    public Book(ProductFactory.ProductType type, int id, boolean availability,
                 String name, String description,
                 double weight, double length, double height,
                 double price, String isbn, String author, String publisher,
@@ -129,6 +135,7 @@ public class Book extends Product {
                 && this.isbn.equals(otherBook.isbn)
                 && this.author.equals(otherBook.author)
                 && this.publisher.equals(otherBook.publisher)
+                && this.genre.equals(otherBook.genre)
                 && this.language.equals(otherBook.language)
                 && this.format.equals(otherBook.format)
                 && this.edition.equals(otherBook.edition)
@@ -141,5 +148,35 @@ public class Book extends Product {
         if (getWeight() > 3) return 2.99;
         return 0.00;
     }
+
+    public static class AuthorLastNameComparator implements Comparator<Book> {
+        @Override
+        public int compare(Book book1, Book book2) {
+            String authorLastName1 = extractAuthorLastName(book1.getAuthor());
+            String authorLastName2 = extractAuthorLastName(book2.getAuthor());
+            return authorLastName1.compareToIgnoreCase(authorLastName2);
+        }
+        
+        private String extractAuthorLastName(String authorFullName) {
+            String[] splittedFullname = authorFullName.split(" ");
+            return splittedFullname[splittedFullname.length - 1];
+        }
+    }
+
+    public static class PublicationDateComparator implements Comparator<Book>{
+        @Override
+        public int compare(Book book1, Book book2) {
+            return book1.publicationDate.compareTo(book2.publicationDate);
+        }    
+    }
+
+    public static class GenreComparator implements Comparator<Book> {
+        @Override
+        public int compare(Book book1, Book book2) {
+            return book1.genre.compareToIgnoreCase(book2.genre);
+        }
+    }
+
+
 
 }

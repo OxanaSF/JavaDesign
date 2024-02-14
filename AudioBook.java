@@ -4,7 +4,8 @@ public class AudioBook extends Book {
     private String narrator;
     private double listeningLength;
 
-    public AudioBook(String type, int id, boolean availability,
+    // M3 HOMEWORK ENUM USE
+    public AudioBook(ProductFactory.ProductType type, int id, boolean availability,
                      String name, String description, double weight,
                      double length, double height, double price, String isbn,
                      String author, String publisher, String genre, String language,

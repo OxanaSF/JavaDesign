@@ -5,7 +5,8 @@ public class EBook extends Book {
     private String fileSize;
 
 
-    public EBook(String type, int id, boolean availability, String name,
+    // M3 HOMEWORK ENUM USE
+    public EBook(ProductFactory.ProductType type, int id, boolean availability, String name,
                  String description, double weight, double length,
                  double height, double price, String isbn, String author,
                  String publisher, String genre, String language, String format,
