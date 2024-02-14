@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -285,159 +286,213 @@ public class Driver {
                 )
         );
 
-        // Interactive Driver START 1
+        // Interactive Driver part 1 START
 
         Scanner scan = new Scanner(System.in);
 
+        boolean keepCreatingProducts = true;
         System.out.print("Welcome!");
-        System.out.print("You are at the beginning of creating product");
 
-        boolean keepEntering1 = true;
-        ProductFactory.ProductType type = null;
+        while (keepCreatingProducts) {
+            System.out.print("You are at the beginning of creating product");
 
-        while (keepEntering1) {
-            System.out.println("Enter product details:");
-            System.out.println("Select # for product type:");
-            System.out.println("1 (Book)");
-            System.out.println("2 (Audio Book)");
-            System.out.println("3 (E-Book)");
-            System.out.print("Enter choice: ");
+            boolean keepEntering1 = true;
+            ProductFactory.ProductType type = null;
 
-            try {
-                int productChoice = Integer.parseInt(scan.nextLine());
+            while (keepEntering1) {
+                System.out.println("Enter product details:");
+                System.out.println("Select # for product type:");
+                System.out.println("1 (Book)");
+                System.out.println("2 (Audio Book)");
+                System.out.println("3 (E-Book)");
+                System.out.print("Enter choice: ");
 
-                switch (productChoice) {
-                    case 1:
-                        type = ProductFactory.ProductType.BOOK;
-                        keepEntering1 = false;
+                try {
+                    int productChoice = Integer.parseInt(scan.nextLine());
+
+                    switch (productChoice) {
+                        case 1:
+                            type = ProductFactory.ProductType.BOOK;
+                            keepEntering1 = false;
+                            break;
+                        case 2:
+                            type = ProductFactory.ProductType.AUDIO_BOOK;
+                            keepEntering1 = false;
+                            break;
+                        case 3:
+                            type = ProductFactory.ProductType.E_BOOK;
+                            keepEntering1 = false;
+                            break;
+                        default:
+                            System.out.println("Invalid choice.");
+                            continue;
+                    }
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a valid number.");
+                }
+
+            }
+
+            System.out.print("Product ID: ");
+            int id = Integer.parseInt(scan.nextLine());
+
+
+            boolean availability;
+            while (true) {
+                System.out.print("Availability (true/false): ");
+                String availabilityInput = scan.nextLine().toLowerCase();
+
+                switch (availabilityInput) {
+                    case "true":
+                        availability = true;
                         break;
-                    case 2:
-                        type = ProductFactory.ProductType.AUDIO_BOOK;
-                        keepEntering1 = false;
-                        break;
-                    case 3:
-                        type = ProductFactory.ProductType.E_BOOK;
-                        keepEntering1 = false;
+                    case "false":
+                        availability = false;
                         break;
                     default:
-                        System.out.println("Invalid choice.");
+                        System.out.println("Invalid input. Please enter 'true' or 'false'.");
                         continue;
                 }
 
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
+                break;
+            }
+
+            System.out.print("Name: ");
+            String name = scan.nextLine();
+
+            System.out.print("Description: ");
+            String description = scan.nextLine();
+
+
+            double weight = validateNumericInput(scan, "Weight: ");
+            double length = validateNumericInput(scan, "Length: ");
+            double height = validateNumericInput(scan, "Height: ");
+            double price = validateNumericInput(scan, "Price: ");
+
+
+            String isbn = "";
+            String author = "";
+            String publisher = "";
+            String genre = "";
+            String language = "";
+            String format = "";
+            String edition = "";
+            int numOfPages = 0;
+            LocalDate publicationDate = null;
+
+            Book newBook = null;
+
+
+            System.out.print("ISBN: ");
+            isbn = scan.nextLine();
+
+            System.out.print("Author: ");
+            author = scan.nextLine();
+
+            System.out.print("Publisher: ");
+            publisher = scan.nextLine();
+
+            System.out.print("Genre: ");
+            genre = scan.nextLine();
+
+            System.out.print("Language: ");
+            language = scan.nextLine();
+
+            System.out.print("Format: ");
+            format = scan.nextLine();
+
+            System.out.print("Edition: ");
+            edition = scan.nextLine();
+
+            System.out.print("Number of Pages: ");
+            numOfPages = Integer.parseInt(scan.nextLine());
+
+
+            boolean validDate = false;
+
+            while (!validDate) {
+                try {
+                    System.out.print("Publication Date (yyyy-mm-dd): ");
+                    String dateInput = scan.nextLine();
+                    publicationDate = LocalDate.parse(dateInput);
+                    validDate = true;
+                } catch (DateTimeParseException e) {
+                    System.out.println("Invalid date format. Please enter the date in yyyy-mm-dd format.");
+                }
+            }
+
+            switch (type) {
+                case BOOK:
+                    newBook = new Book(type, id, availability, name, description, weight, length, height, price,
+                            isbn, author, publisher, genre, language, format, edition, numOfPages, publicationDate);
+                    break;
+                case AUDIO_BOOK:
+                    System.out.print("Narrator: ");
+                    String narrator = scan.nextLine();
+
+                    double listeningLength = 0.0;
+                    boolean validListeningLength = false;
+                    while (!validListeningLength) {
+                        try {
+                            System.out.print("Listening Length: ");
+                            listeningLength = Double.parseDouble(scan.nextLine());
+                            validListeningLength = true;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
+                    }
+
+
+                    newBook = new AudioBook(type, id, availability, name, description, weight, length, height, price,
+                            isbn, author, publisher, genre, language, format, edition, numOfPages,
+                            publicationDate, narrator, listeningLength);
+                    break;
+                case E_BOOK:
+                    System.out.print("Link to Read: ");
+                    String linkToRead = scan.nextLine();
+
+                    System.out.print("File Size: ");
+                    String fileSize = scan.nextLine();
+
+
+                    newBook = new EBook(type, id, availability, name, description, weight, length, height, price,
+                            isbn, author, publisher, genre, language, format, edition, numOfPages,
+                            publicationDate, linkToRead, fileSize);
+                    break;
+
+            }
+
+            System.out.println(newBook);
+
+            books.add(newBook);
+            System.out.println("Book added successfully!");
+
+            String tryYesNoInput = "";
+            boolean validYesNoInput = false;
+
+            while (!validYesNoInput) {
+                System.out.println("Do you want to enter another book? (yes/no)");
+                tryYesNoInput = scan.nextLine().toLowerCase();
+
+                if (tryYesNoInput.equals("yes") || tryYesNoInput.equals("no")) {
+                    validYesNoInput = true;
+                } else {
+                    System.out.println("Invalid input. Please enter yes or no.");
+                }
+            }
+
+            if (tryYesNoInput.equals("no")) {
+                keepEntering1 = false;
+                break;
             }
 
         }
 
-        System.out.print("Product ID: ");
-        int id = Integer.parseInt(scan.nextLine());
-
-        System.out.print("Availability (true/false): ");
-        boolean availability = Boolean.parseBoolean(scan.nextLine());
-
-        System.out.print("Name: ");
-        String name = scan.nextLine();
-
-        System.out.print("Description: ");
-        String description = scan.nextLine();
-
-        System.out.print("Weight: ");
-        double weight = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Length: ");
-        double length = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Height: ");
-        double height = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Price: ");
-        double price = Double.parseDouble(scan.nextLine());
+        // Interactive Driver part 1 END
 
 
-        String isbn = "";
-        String author = "";
-        String publisher = "";
-        String genre = "";
-        String language = "";
-        String format = "";
-        String edition = "";
-        int numOfPages = 0;
-        LocalDate publicationDate = null;
-
-        Book newBook = null;
-        switch (type) {
-            case BOOK:
-                System.out.print("ISBN: ");
-                isbn = scan.nextLine();
-
-                System.out.print("Author: ");
-                author = scan.nextLine();
-
-                System.out.print("Publisher: ");
-                publisher = scan.nextLine();
-
-                System.out.print("Genre: ");
-                genre = scan.nextLine();
-
-                System.out.print("Language: ");
-                language = scan.nextLine();
-
-                System.out.print("Format: ");
-                format = scan.nextLine();
-
-                System.out.print("Edition: ");
-                edition = scan.nextLine();
-
-                System.out.print("Number of Pages: ");
-                numOfPages = Integer.parseInt(scan.nextLine());
-
-                System.out.print("Publication Date (yyyy-mm-dd): ");
-                publicationDate = LocalDate.parse(scan.nextLine());
-
-                newBook = new Book(type, id, availability, name, description, weight, length, height, price,
-                        isbn, author, publisher, genre, language, format, edition, numOfPages, publicationDate);
-                break;
-            case AUDIO_BOOK:
-                System.out.print("Narrator: ");
-                String narrator = scan.nextLine();
-
-                System.out.print("Listening Length: ");
-                double listeningLength = Double.parseDouble(scan.nextLine());
-
-                newBook = new AudioBook(type, id, availability, name, description, weight, length, height, price,
-                        isbn, author, publisher, genre, language, format, edition, numOfPages,
-                        publicationDate, narrator, listeningLength);
-                break;
-            case E_BOOK:
-                System.out.print("Link to Read: ");
-                String linkToRead = scan.nextLine();
-
-                System.out.print("File Size: ");
-                String fileSize = scan.nextLine();
-
-
-                newBook = new EBook(type, id, availability, name, description, weight, length, height, price,
-                        isbn, author, publisher, genre, language, format, edition, numOfPages,
-                        publicationDate, linkToRead, fileSize);
-                break;
-
-        }
-
-        books.add(newBook);
-
-        System.out.println("Book added successfully!");
-
-        System.out.println("Do you want to enter another book? (yes/no)");
-        String continueInput = scan.nextLine().toLowerCase();
-        if (!continueInput.equals("yes")) {
-            keepEntering1 = false;
-        }
-
-        // Interactive Driver END 1
-
-
-        // Interactive Driver START 2
+        // Interactive Driver part 2 START
         boolean keepEntering2 = true;
         boolean keepPrinting = true;
         String sortedBy = "";
@@ -489,8 +544,25 @@ public class Driver {
             }
 
         }
-        // Interactive Driver END 2
-
+        // Interactive Driver part 2 END
 
     }
+
+    public static double validateNumericInput(Scanner scan, String userInput) {
+        boolean validInput = false;
+        double value = 0.0;
+
+        while (!validInput) {
+            try {
+                System.out.print(userInput);
+                value = Double.parseDouble(scan.nextLine());
+                validInput = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+
+        return value;
+    }
+
 }
