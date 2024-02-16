@@ -334,9 +334,7 @@ public class Driver {
 
             }
 
-            System.out.print("Product ID: ");
-            int id = Integer.parseInt(scan.nextLine());
-
+            int id = validateIntegerInput(scan, "Product ID: ");
 
             boolean availability;
             while (true) {
@@ -364,12 +362,10 @@ public class Driver {
             System.out.print("Description: ");
             String description = scan.nextLine();
 
-
-            double weight = validateNumericInput(scan, "Weight: ");
-            double length = validateNumericInput(scan, "Length: ");
-            double height = validateNumericInput(scan, "Height: ");
-            double price = validateNumericInput(scan, "Price: ");
-
+            double weight = validateDoubleNumericInput(scan, "Weight: ");
+            double length = validateDoubleNumericInput(scan, "Length: ");
+            double height = validateDoubleNumericInput(scan, "Height: ");
+            double price = validateDoubleNumericInput(scan, "Price: ");
 
             String isbn = "";
             String author = "";
@@ -382,7 +378,6 @@ public class Driver {
             LocalDate publicationDate = null;
 
             Book newBook = null;
-
 
             System.out.print("ISBN: ");
             isbn = scan.nextLine();
@@ -405,9 +400,7 @@ public class Driver {
             System.out.print("Edition: ");
             edition = scan.nextLine();
 
-            System.out.print("Number of Pages: ");
-            numOfPages = Integer.parseInt(scan.nextLine());
-
+            numOfPages = validateIntegerInput(scan, "Number of Pages: ");
 
             boolean validDate = false;
 
@@ -431,18 +424,7 @@ public class Driver {
                     System.out.print("Narrator: ");
                     String narrator = scan.nextLine();
 
-                    double listeningLength = 0.0;
-                    boolean validListeningLength = false;
-                    while (!validListeningLength) {
-                        try {
-                            System.out.print("Listening Length: ");
-                            listeningLength = Double.parseDouble(scan.nextLine());
-                            validListeningLength = true;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid input. Please enter a valid number.");
-                        }
-                    }
-
+                    double listeningLength = validateDoubleNumericInput(scan, "Listening Length: ");
 
                     newBook = new AudioBook(type, id, availability, name, description, weight, length, height, price,
                             isbn, author, publisher, genre, language, format, edition, numOfPages,
@@ -548,7 +530,7 @@ public class Driver {
 
     }
 
-    public static double validateNumericInput(Scanner scan, String userInput) {
+    public static double validateDoubleNumericInput(Scanner scan, String userInput) {
         boolean validInput = false;
         double value = 0.0;
 
@@ -564,5 +546,23 @@ public class Driver {
 
         return value;
     }
+
+    public static int validateIntegerInput(Scanner scan, String userInput) {
+        boolean validInput = false;
+        int value = 0;
+
+        while (!validInput) {
+            try {
+                System.out.print(userInput);
+                value = Integer.parseInt(scan.nextLine());
+                validInput = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+
+        return value;
+    }
+
 
 }
